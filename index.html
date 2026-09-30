@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Examen de Simulación – Álgebra y Cálculo</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f7fb;--card:#fff;--tx:#1d2433;--mu:#5b6478;--ac:#2f5bea;--ok:#1a8f4c;--ko:#c93232;--bd:#dde1ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151d;--card:#1c212d;--tx:#e7eaf2;--mu:#9aa3b8;--ac:#6f90ff;--ok:#4cd08a;--ko:#ff7a7a;--bd:#2d3444}}
+:root[data-theme="dark"]{--bg:#12151d;--card:#1c212d;--tx:#e7eaf2;--mu:#9aa3b8;--ac:#6f90ff;--ok:#4cd08a;--ko:#ff7a7a;--bd:#2d3444}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45}
+main{max-width:760px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin:12px 0}
+h1{font-size:1.3rem;margin:.2em 0}.mu{color:var(--mu);font-size:.9rem}
+input[type=text]{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;font-size:1rem;background:var(--bg);color:var(--tx);box-sizing:border-box}
+button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:12px 20px;font-size:1rem;cursor:pointer}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--bd);border-radius:8px;margin:6px 0;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,transparent)}
+.opt.ko{border-color:var(--ko);background:color-mix(in srgb,var(--ko) 15%,transparent)}
+.qh{display:flex;justify-content:space-between;font-weight:600}
+.ex{font-size:.88rem;color:var(--mu);margin-top:8px}
+#bar{position:sticky;top:env(safe-area-inset-top,0px);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;z-index:5}
+.big{font-size:2.2rem;font-weight:700;color:var(--ac)}
+.hide{display:none}
+</style></head><body><main>
+<div id="start" class="card">
+<h1>EXAMEN DE SIMULACIÓN</h1>
+<p class="mu">Fundamentos de Álgebra, Aplicaciones Económicas y Cálculo Limítrofe · 20 reactivos · 200 pts · 120 min</p>
+<p class="mu">Selecciona una sola opción por pregunta. Se permite calculadora científica básica. Al terminar, el examen se califica automáticamente.</p>
+<label>Nombre de usuario:</label><br><input id="nm" type="text" placeholder="Escribe tu nombre" autocomplete="name">
+<p><button onclick="go()">Comenzar examen</button></p></div>
+<div id="exam" class="hide"><div id="bar"><span id="who"></span><span id="tm"></span></div><div id="qs"></div>
+<p><button onclick="fin()">Terminar y calificar</button> <span id="warn" class="mu"></span></p></div>
+<div id="res" class="hide"></div>
+</main>
+<script>
+const Q=[
+["Un profesional independiente realiza 3 viajes de trabajo al mes a una ciudad vecina. El costo fijo por viaje redondo es de $150 más $2 por cada kilómetro recorrido. Si la distancia de ida es de 40 km, ¿cuál es el costo total mensual de todos los viajes, incluyendo el regreso?",["$690","$930","$1,110"],1,"Viaje redondo = 80 km → $150 + 2(80) = $310. Por 3 viajes: $930."],
+["Un repartidor realiza 6 trayectos a la semana. Cada viaje redondo tiene tarifa base de $90 más $1.20 por km. Si la distancia de ida es de 50 km, ¿cuál es el costo semanal de los 6 viajes redondos?",["$900","$1,440","$1,260"],2,"Redondo = 100 km → $90 + 1.20(100) = $210. Por 6: $1,260."],
+["Un gimnasio cobra inscripción de $1,200 y mensualidad fija de $350. Si un socio cancela exactamente después de 8 meses, ¿cuál fue el costo total?",["$3,550","$4,000","$2,800"],1,"$1,200 + 8(350) = $1,200 + $2,800 = $4,000."],
+["Una plataforma de cursos cobra certificación única de $600 más suscripción mensual de $180. Si el estudiante se da de baja tras 12 meses, ¿cuál fue el gasto total?",["$2,760","$2,160","$2,940"],0,"$600 + 12(180) = $600 + $2,160 = $2,760."],
+["La comisión individual por proyecto es C(n) = 5000 / n, donde n es el número de consultores. Además cada uno recibe un sueldo base fijo de $1,500. ¿Qué sucede únicamente con C(n) cuando n → ∞?",["lím C(n) = 5000","lím C(n) = 1500","lím C(n) = 0"],2,"Una constante dividida entre un número cada vez mayor tiende a 0."],
+["Un fondo de $30,000 se reparte entre x comunidades; cada una recibe P(x) = 30000 / x. ¿Cuál es el comportamiento cuando x → ∞?",["lím P(x) = ∞","lím P(x) = 0","lím P(x) = 30000"],1,"30000/x se aproxima a 0 al crecer x."],
+["Dada f(x) = 1 / (x − 2), ¿cuál es el límite lateral derecho cuando x → 2⁺?",["−∞","∞","0"],1,"Con x > 2 el denominador es positivo y muy pequeño: 1/(+0) → +∞."],
+["Considere g(x) = 1 / (x + 6). Determine el límite lateral izquierdo cuando x → −6⁻.",["∞","0","−∞"],2,"Con x < −6 el denominador es negativo y cercano a 0: 1/(−0) → −∞."],
+["Si f(x) = 2x + 5 y g(x) = x − 3, ¿cuál es lím(x→3) [f(x) + g(x)]?",["14","11","6"],1,"f(3) = 11 y g(3) = 0. Suma = 11."],
+["Dadas f(x) = 6x − 1 y g(x) = 2x + 3, evalúe lím(x→3) [f(x) − g(x)].",["8","−8","26"],0,"f(3) = 17, g(3) = 9. Resta: 17 − 9 = 8."],
+["Si f(x) = x + 3 y g(x) = 2x, ¿cuál es lím(x→4) [f(x) · g(x)]?",["28","48","56"],2,"f(4) = 7, g(4) = 8. Producto: 56."],
+["Sean f(x) = 3x + 1 y g(x) = x² − 1. Determine lím(x→2) [f(x) / g(x)].",["7/3","1","21"],0,"f(2) = 7, g(2) = 3. Cociente: 7/3."],
+["Dada f(x) = (5x² + 9) / x², ¿cuál es el límite cuando x → ∞?",["9","5","∞"],1,"f(x) = 5 + 9/x²; el término 9/x² → 0, resultando 5."],
+["Calcule lím(x→∞) (6x³ − x + 2) / (2x³ + 7).",["0","∞","3"],2,"Mismo grado: cociente de coeficientes principales 6/2 = 3."],
+["Dada f(x) = (x² − 9) / (x − 3), ¿qué tipo de discontinuidad presenta en x = 3 y cómo se resuelve?",["Esencial, porque la función no tiene límite en x = 3.","Removible, definiendo f(3) = 6 tras simplificar a f(x) = x + 3.","De salto finito, porque los límites laterales son distintos."],1,"(x−3)(x+3)/(x−3) = x + 3; el límite es 6, por lo que f(3) = 6 la remueve."],
+["Analice g(x) = (x² − 36) / (x + 6) en x = −6. ¿Cuál es el procedimiento correcto para removerla?",["Es removible; se simplifica a g(x) = x − 6 y se asigna g(−6) = −12.","Es esencial e irremovible.","Es de salto infinito, diverge a dos asíntotas distintas."],0,"(x−6)(x+6)/(x+6) = x − 6; el límite en −6 es −12."],
+["El tiempo de procesamiento (h) es T(x) = (x³ − 8) / (x² − 4), x ≠ ±2. ¿Qué discontinuidad hay en x = 2 y cuál es su solución?",["Esencial, por asíntota vertical ineludible.","De salto, por falta de concordancia entre valores previos.","Removible, simplificando a (x² + 2x + 4)/(x + 2) y redefiniendo T(2) = 3."],2,"(x−2)(x²+2x+4)/[(x−2)(x+2)]; en x = 2: 12/4 = 3."],
+["El costo unitario es C(x) = (x³ + 1) / (x² − 1), x ≠ ±1. Determine la discontinuidad en x = −1 y cómo corregirla.",["Esencial, porque el límite bilateral no existe.","De salto, porque el límite por la izquierda es negativo.","Removible, simplificando a (x² − x + 1)/(x − 1) y redefiniendo C(−1) = −3/2."],2,"(x+1)(x²−x+1)/[(x−1)(x+1)]; en x = −1: 3/(−2) = −3/2."],
+["La temperatura de un reactor es una función continua T(t) en t ∈ [1, 8] min. Si T(1) = 20 °C y T(8) = 90 °C, ¿qué garantiza el Teorema del Valor Intermedio?",["La temperatura aumentó a razón constante de 10 °C por minuto.","Existe al menos un instante t₀ entre 1 y 8 min en el que la temperatura es exactamente 60 °C.","No se puede asegurar nada sin conocer la ecuación de T(t)."],1,"T es continua y 60 está entre 20 y 90, por el TVI existe t₀ con T(t₀) = 60."],
+["La producción acumulada P(t) es continua en t ∈ [1, 20] días. Si P(1) = 300 y P(20) = 3,000 unidades, ¿qué afirmación es certera según el TVI?",["La planta produjo exactamente 150 unidades diarias.","El máximo de producción ocurrió el día 10.","Existe al menos un día t en [1, 20] en que la producción acumulada fue exactamente 1,500 unidades."],2,"Como 300 < 1,500 < 3,000 y P es continua, el TVI garantiza ese día."]
+];
+const L="ABC";let A=Array(Q.length).fill(null),name="",t0,iv,done=false;
+function go(){name=nm.value.trim();if(!name){nm.focus();nm.placeholder="Ingresa tu nombre para continuar";return}
+who.textContent=name;start.classList.add("hide");exam.classList.remove("hide");t0=Date.now();
+qs.innerHTML=Q.map((q,i)=>`<div class="card"><div class="qh"><span>Pregunta ${i+1}</span><span class="mu">10 pts</span></div><p>${q[0]}</p>`+q[1].map((o,j)=>`<label class="opt" id="o${i}_${j}"><input type="radio" name="q${i}" onchange="A[${i}]=${j}"><span>${o}</span></label>`).join("")+`<div class="ex hide" id="e${i}"></div></div>`).join("");
+iv=setInterval(tick,1000);tick()}
+function tick(){const r=7200-Math.floor((Date.now()-t0)/1000);if(r<=0){fin(true);return}
+tm.textContent="⏱ "+String(Math.floor(r/60)).padStart(2,"0")+":"+String(r%60).padStart(2,"0")}
+function fin(force){if(done)return;const n=A.filter(x=>x===null).length;
+if(n&&!force&&!confirm("Te faltan "+n+" pregunta(s) por responder. ¿Terminar de todos modos?"))return;
+done=true;clearInterval(iv);let ok=0;
+Q.forEach((q,i)=>{document.querySelectorAll(`input[name=q${i}]`).forEach(x=>x.disabled=true);
+q[1].forEach((_,j)=>{const el=document.getElementById(`o${i}_${j}`);if(j===q[2])el.classList.add("ok");else if(A[i]===j)el.classList.add("ko")});
+const e=document.getElementById("e"+i);e.classList.remove("hide");e.textContent=(A[i]===q[2]?"✔ Correcta. ":"✘ "+(A[i]===null?"Sin responder. ":"Incorrecta. ")+"Respuesta: "+L[q[2]]+". ")+q[3];if(A[i]===q[2])ok++});
+const sc=ok*10,mins=Math.round((Date.now()-t0)/60000);
+res.innerHTML=`<div class="card" style="text-align:center"><h1>Resultados de ${name.replace(/</g,"&lt;")}</h1><div class="big">${sc} / 200</div><p>${ok} de ${Q.length} correctas · ${Math.round(ok/Q.length*100)}% · Tiempo: ${mins} min</p><p class="mu">Revisa abajo la retroalimentación de cada pregunta.</p><button onclick="location.reload()">Reiniciar examen</button></div>`;
+res.classList.remove("hide");exam.insertBefore(res,exam.firstChild);warn.textContent="";window.scrollTo(0,0)}
+</script></body></html>
